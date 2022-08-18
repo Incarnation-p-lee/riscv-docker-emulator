@@ -11,10 +11,11 @@ on:
 jobs:
   docker:
     runs-on: ubuntu-latest
-    steps:
-      - name: Get Version
-        uses: hsblhsn/version-or-commit-sha@v1
-        id: get_version
+    steps:      
+      - uses: actions/checkout@v2
+      - name: Get Release Name or Commit ID
+        uses: tenhaus/get-release-or-tag@v2
+        id: tag
       - name: Generate Tag
         id: t1
         uses: Kaven-Universe/github-action-current-date-time@v1.1.0
@@ -30,4 +31,4 @@ jobs:
         with:
           file: Dockerfile.qemu
           push: true
-          tags: plincar/riscv-qemu-emulator:latest, plincar/riscv-qemu-emulator:${{ steps.t1.outputs.time }}-${{ steps.get_version.outputs.VERSION_OR_COMMIT_SHA }}
+          tags: plincar/riscv-qemu-emulator:latest, plincar/riscv-qemu-emulator:${{ steps.t1.outputs.time }}-${{ steps.tag.outputs.tag }}
