@@ -1,6 +1,8 @@
 FROM ubuntu
 EXPOSE 9999
 
+ARG RISCV64_IMAGE=ubuntu-22.04.1-preinstalled-server-riscv64+unmatched.img
+
 # Install packages
 RUN apt update && apt upgrade -y && apt install -y \
     ca-certificates git wget qemu-system-misc opensbi u-boot-qemu qemu-utils xz-utils && \
@@ -8,12 +10,12 @@ RUN apt update && apt upgrade -y && apt install -y \
 
 # Install qemu
 WORKDIR "/root"
-RUN wget https://cdimage.ubuntu.com/releases/22.04.1/release/ubuntu-22.04.1-preinstalled-server-riscv64+unmatched.img.xz && \
-    xz -dk ubuntu-22.04.1-preinstalled-server-riscv64+unmatched.img.xz
+RUN wget https://cdimage.ubuntu.com/releases/22.04.1/release/${RISCV64_IMAGE}.xz && \
+    xz -dk ${RISCV64_IMAGE}.xz && rm ${RISCV64_IMAGE}.xz
 
 # Run with qemu
 CMD qemu-system-riscv64 -machine virt -nographic -m 4G -smp 4 -cpu rv64 \
     -bios /usr/lib/riscv64-linux-gnu/opensbi/generic/fw_jump.elf \
     -kernel /usr/lib/u-boot/qemu-riscv64_smode/uboot.elf \
     -device virtio-net-device,netdev=eth0 -netdev user,id=eth0 \
-    -drive file=ubuntu-22.04.1-preinstalled-server-riscv64+unmatched.img,format=raw,if=virtio
+    -drive file=${RISCV64_IMAGE},format=raw,if=virtio
