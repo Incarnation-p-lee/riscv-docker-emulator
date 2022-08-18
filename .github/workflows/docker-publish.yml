@@ -1,0 +1,27 @@
+name: ci
+
+on:
+  push:
+    branches:
+      - 'master'
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Generate Tag
+        id: t1
+        uses: Kaven-Universe/github-action-current-date-time@v1.1.0
+        with:
+          format: "YYYY_MM_DD-HH"
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: plincar
+          password: ${{ secrets.DOCKER_HUB_TOKEN }}
+      - name: Build and push
+        uses: docker/build-push-action@v3
+        with:
+          file: Dockerfile.qemu
+          push: true
+          tags: plincar/riscv-qemu-emulator:latest, plincar/riscv-qemu-emulator:${{ steps.t1.outputs.time }}
