@@ -16,7 +16,7 @@ jobs:
         id: t1
         uses: Kaven-Universe/github-action-current-date-time@v1.1.0
         with:
-          format: "YYYY_MM_DD-HH"
+          format: "YYYY_MM_DD-HH_mm"
       - name: Login to DockerHub
         uses: docker/login-action@v2
         with:
