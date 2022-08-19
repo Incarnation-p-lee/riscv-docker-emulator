@@ -1,6 +1,8 @@
 FROM ubuntu
 EXPOSE 9999
 
+ARGS GNU_TOOLCHAIN=riscv-gnu-toolchain
+
 # Install packages
 RUN apt update && apt upgrade -y && apt install -y \
     autoconf automake autotools-dev curl python3 libmpc-dev libmpfr-dev libgmp-dev \
@@ -10,6 +12,6 @@ RUN apt update && apt upgrade -y && apt install -y \
 
 # Build gnu toolchain
 WORKDIR "/root"
-RUN git clone https://github.com/riscv/riscv-gnu-toolchain && \
-    cd riscv-gnu-toolchain && ./configure --prefix=/opt/riscv --enable-multilib && \
-    make -j8
+RUN git clone https://github.com/riscv/${GNU_TOOLCHAIN} && \
+    cd ${GNU_TOOLCHAIN} && ./configure --prefix=/opt/riscv --enable-multilib && \
+    make -j8 && rm -rf ${GNU_TOOLCHAIN}
