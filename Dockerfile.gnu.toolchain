@@ -22,4 +22,4 @@ WORKDIR "/root"
 RUN git clone https://github.com/riscv-software-src/${RISCV_TOOLS} && \
     cd ${RISCV_TOOLS} && git submodule update --init --recursive && \
     export RISCV=/opt/riscv/tools && export PATH="/opt/riscv/gnu-toolchain/bin:$PATH" && \
-    cd - && rm -rf ${RISCV_TOOLS}
+    ./build.sh && cd - && rm -rf ${RISCV_TOOLS}
