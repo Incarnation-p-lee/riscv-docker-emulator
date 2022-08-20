@@ -15,7 +15,7 @@ RUN apt update && apt upgrade -y && apt install -y \
 WORKDIR "/root"
 RUN git clone https://github.com/riscv/${GNU_TOOLCHAIN} && \
     cd ${GNU_TOOLCHAIN} && ./configure --prefix=/opt/riscv/gnu-toolchain --enable-multilib && \
-    make -j8 && cd - && rm -rf ${GNU_TOOLCHAIN}
+    make -j8 > /dev/null && cd - && rm -rf ${GNU_TOOLCHAIN}
 
 # Build RISCV tools
 WORKDIR "/root"
