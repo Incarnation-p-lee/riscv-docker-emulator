@@ -15,3 +15,5 @@ WORKDIR "/root"
 RUN git clone https://github.com/riscv/${GNU_TOOLCHAIN} && \
     cd ${GNU_TOOLCHAIN} && ./configure --prefix=/opt/riscv/gnu-toolchain --enable-multilib && \
     make -j8 > /dev/null && cd - && rm -rf ${GNU_TOOLCHAIN}
+
+CMD export PATH="/opt/riscv/gnu-toolchain:$PATH" && bash
