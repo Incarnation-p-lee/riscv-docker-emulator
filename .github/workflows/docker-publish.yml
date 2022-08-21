@@ -11,7 +11,7 @@ on:
 jobs:
   docker:
     runs-on: ubuntu-latest
-    steps:      
+    steps:
       - uses: actions/checkout@v2
       - name: Get Release Name or Commit ID
         uses: tenhaus/get-release-or-tag@v2
@@ -26,9 +26,15 @@ jobs:
         with:
           username: plincar
           password: ${{ secrets.DOCKER_HUB_TOKEN }}
-      - name: Build and push
+      - name: Build and Push Qemu
         uses: docker/build-push-action@v3
         with:
           file: Dockerfile.qemu
           push: true
           tags: plincar/riscv-qemu-emulator:latest, plincar/riscv-qemu-emulator:${{ steps.t1.outputs.time }}-${{ steps.tag.outputs.tag }}
+      - name: Build and Push GNU Toolchain
+        uses: docker/build-push-action@v3
+        with:
+          file: Dockerfile.gnu.toolchain
+          push: true
+          tags: plincar/riscv-gnu-toolchain-emulator:latest, plincar/riscv-gnu-toolchain-emulator:${{ steps.t1.outputs.time }}-${{ steps.tag.outputs.tag }}
