@@ -1,7 +1,7 @@
 FROM plincar/riscv-gnu-toolchain
 EXPOSE 9999
 
-ARG RISCV_TOOLS=riscv-tools
+ARG RISCV_PK=riscv-pk
 
 # Install packages
 RUN apt update && apt upgrade -y && \
@@ -9,7 +9,7 @@ RUN apt update && apt upgrade -y && \
 
 # Build RISCV tools
 WORKDIR "/root"
-RUN git clone https://github.com/riscv-software-src/${RISCV_TOOLS} && \
-    cd ${RISCV_TOOLS} && git submodule update --init --recursive && \
-    export RISCV=/opt/riscv/tools && export PATH="/opt/riscv/gnu-toolchain/bin:$PATH"
+RUN git clone https://github.com/riscv-software-src/${RISCV_PK}.git && \
+    cd ${RISCV_PK} && export RISCV=/opt/riscv/tools && \
+    export PATH="/opt/riscv/gnu-toolchain/bin:$PATH"
     # ./build.sh && cd - && rm -rf ${RISCV_TOOLS}

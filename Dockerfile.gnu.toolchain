@@ -7,7 +7,7 @@ ARG GNU_TOOLCHAIN=riscv-gnu-toolchain
 RUN apt update && apt upgrade -y && apt install -y \
     autoconf automake autotools-dev curl python3 libmpc-dev libmpfr-dev libgmp-dev \
     git gawk build-essential bison flex texinfo gperf libtool patchutils bc \
-    zlib1g-dev libexpat-dev libusb-1.0-0-dev device-tree-compiler pkg-config && \
+    zlib1g-dev libexpat-dev libusb-1.0-0-dev device-tree-compiler pkg-config vim && \
     apt autoremove -y && apt clean && rm -rf /var/lib/apt/lists/*
 
 # Build gnu toolchain
