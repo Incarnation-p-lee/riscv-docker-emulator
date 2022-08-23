@@ -24,4 +24,5 @@ RUN git clone https://github.com/riscv-software-src/${ISA_SIM}.git && \
     mkdir build && cd build && ../configure --prefix=$RISCV && \
     make && make install && cd ../../ && rm -rf ${ISA_SIM}
 
-CMD export PATH="/opt/riscv/tools/riscv-pk:$PATH" && bash
+CMD export PATH="/opt/riscv/gnu-toolchain/bin:/opt/riscv/tools/riscv-pk/bin: \
+    /opt/riscv/tools/riscv-isa-sim/bin:$PATH" && bash
