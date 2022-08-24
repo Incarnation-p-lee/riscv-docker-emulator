@@ -26,21 +26,21 @@ jobs:
         with:
           username: plincar
           password: ${{ secrets.DOCKER_HUB_TOKEN }}
-      - name: Build and Push Qemu
-        uses: docker/build-push-action@v3
-        with:
-          file: Dockerfile.qemu
-          push: true
-          tags: plincar/riscv-qemu-emulator:latest, plincar/riscv-qemu-emulator:${{ steps.t1.outputs.time }}-${{ steps.tag.outputs.tag }}
+      #- name: Build and Push Qemu
+      #  uses: docker/build-push-action@v3
+      #  with:
+      #    file: Dockerfile.qemu
+      #    push: true
+      #    tags: plincar/riscv-qemu-emulator:latest, plincar/riscv-qemu-emulator:${{ steps.t1.outputs.time }}-${{ steps.tag.outputs.tag }}
       - name: Build and Push GNU Toolchain
         uses: docker/build-push-action@v3
         with:
           file: Dockerfile.gnu.toolchain
           push: true
           tags: plincar/riscv-gnu-toolchain:latest, plincar/riscv-gnu-toolchain:${{ steps.t1.outputs.time }}-${{ steps.tag.outputs.tag }}
-      - name: Build and Push RISCV Toolchain
-        uses: docker/build-push-action@v3
-        with:
-          file: Dockerfile.riscv.tools
-          push: true
-          tags: plincar/riscv-tools:latest, plincar/riscv-tools:${{ steps.t1.outputs.time }}-${{ steps.tag.outputs.tag }}
+      #- name: Build and Push RISCV Toolchain
+      #  uses: docker/build-push-action@v3
+      #  with:
+      #    file: Dockerfile.riscv.tools
+      #    push: true
+      #    tags: plincar/riscv-tools:latest, plincar/riscv-tools:${{ steps.t1.outputs.time }}-${{ steps.tag.outputs.tag }}
