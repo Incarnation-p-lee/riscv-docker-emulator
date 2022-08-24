@@ -37,4 +37,4 @@ jobs:
         with:
           file: Dockerfile.gnu.toolchain
           push: true
-          tags: plincar/riscv-gnu-toolchain-emulator:latest, plincar/riscv-gnu-toolchain-emulator:${{ steps.t1.outputs.time }}-${{ steps.tag.outputs.tag }}
+          tags: plincar/riscv-gnu-toolchain:latest, plincar/riscv-gnu-toolchain:${{ steps.t1.outputs.time }}-${{ steps.tag.outputs.tag }}
