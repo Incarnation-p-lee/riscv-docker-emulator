@@ -16,14 +16,14 @@ RUN apt update && apt upgrade -y && apt install -y \
 WORKDIR "/root"
 RUN git clone https://github.com/riscv/${GNU_TOOLCHAIN} && \
     cd ${GNU_TOOLCHAIN} && \
-    git submodule set-url glibc https://sourceware.org/git/glibc.git && \
-    git submodule set-url newlib https://sourceware.org/git/newlib-cygwin.git && \
-    git submodule set-url musl https://git.musl-libc.org/musl.git && \
+    # git submodule set-url glibc https://sourceware.org/git/glibc.git && \
+    # git submodule set-url newlib https://sourceware.org/git/newlib-cygwin.git && \
+    # git submodule set-url musl https://git.musl-libc.org/musl.git && \
     # multilib \
-    ./configure --prefix=${MULTILIB_PREFIX} \
-    --enable-multilib \
-    --with-arch=rv64imafdc --with-abi=lp64d --with-isa-spec=2.2 && \
-    make -j`nproc` && make install && make clean && \
+    # ./configure --prefix=${MULTILIB_PREFIX} \
+    # --enable-multilib \
+    # --with-arch=rv64imafdc --with-abi=lp64d --with-isa-spec=2.2 && \
+    # make -j`nproc` && make install && make clean && \
     # RV64 with Spike, spike only support RV64 \
     ./configure --prefix=${RV64_PREFIX} \
     --with-arch=rv64imafdc --with-abi=lp64d --with-isa-spec=2.2 --with-sim=spike && \
