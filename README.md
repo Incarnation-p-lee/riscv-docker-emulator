@@ -11,7 +11,7 @@ Provide out of box docker image for the RISCV emulator.
 
 ### How to Steps
 
-1. Start the docker image with below command
+1. Start the docker image with below command.
    ```
    docker run -ti plincar/riscv-qemu-emulator:latest
    ```
@@ -111,6 +111,44 @@ Provide out of box docker image for the RISCV emulator.
 ### Open Issues
 
 1. The performance of this emulator is not as fast as hardware due to qemu emulation.
+
+## GNU Toolchain
+
+### How to Steps
+
+1. Start the docker image with below command.
+   ```
+   docker run -ti plincar/riscv-gnu-toolchain:latest
+   ```
+2. Check the toolchain install dir. The RV64 only toolchain installed under `/opt/riscv/gnu-toolchain/rv64`, while the multilib toolchain installed under `/opt/riscv/gnu-toolchain/multilib`.
+
+3. Validate the C programming language with the emulator.
+
+   1. Compile below C code with `riscv64-unknown-gnu-gcc main.c -o c.out`.
+
+      ```c
+      #include <stdio.h>
+
+      int main()
+      {
+      	printf("Hello, world!\n");
+      	return 0;
+      }
+      ```
+
+   2. If everything goes well, you can execute the binary with spike as blow.
+      ```
+      /opt/riscv/gnu-toolchain/rv64/bin/spike /opt/riscv/gnu-toolchain/riscv64-unknown-elf/bin/pk64 c.out
+      bbl loader
+      Hello, world!
+      file c.out
+      c.out: ELF 64-bit LSB pie executable, UCB RISC-V, RVC, double-float ABI, version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux-riscv64-lp64d.so.1, BuildID[sha1]=b5d550645bc6fbb2045c8b07d710ac9d7df44aad, for GNU/Linux 4.15.0, not stripped
+      ```
+
+### Open Issue
+
+- RV32 spike support, see this [issue](https://github.com/riscv-collab/riscv-gnu-toolchain/issues/1087).
+- SSH url sub module, see this [question](https://github.com/riscv-collab/riscv-gnu-toolchain/issues/1118).
 
 ## Reference Link
 
