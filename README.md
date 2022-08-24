@@ -118,7 +118,7 @@ Provide out of box docker image for the RISCV emulator.
 
 1. Start the docker image with below command.
    ```
-   docker run -ti plincar/riscv-tools:latest
+   docker run -ti plincar/riscv-gnu-toolchain:latest
    ```
 2. Check the toolchain install dir. The RV64 only toolchain installed under `/opt/riscv/gnu-toolchain/rv64`, while the multilib toolchain installed under `/opt/riscv/gnu-toolchain/multilib`.
 
