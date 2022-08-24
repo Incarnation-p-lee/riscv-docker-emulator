@@ -25,7 +25,7 @@ RUN git clone https://github.com/riscv/${GNU_TOOLCHAIN} && \
     # --with-arch=rv64imafdc --with-abi=lp64d --with-isa-spec=2.2 && \
     # make -j`nproc` && make install && make clean && \
     # RV64 with Spike, spike only support RV64 \
-    git submodule update pk && \
+    git submodule init && git submodule update pk && \
     ./configure --prefix=${RV64_PREFIX} \
     --with-arch=rv64imafdc --with-abi=lp64d --with-isa-spec=2.2 --with-sim=spike && \
     make -j`nproc` build-sim SIM=spike && make install && \
