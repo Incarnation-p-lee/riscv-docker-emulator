@@ -113,6 +113,7 @@ Provide out of box docker image for the RISCV emulator.
 1. The performance of this emulator is not as fast as hardware due to qemu emulation.
 
 ## GNU Toolchain
+
 ### How to Steps
 
 1. Start the docker image with below command.
@@ -122,6 +123,7 @@ Provide out of box docker image for the RISCV emulator.
 2. Check the toolchain install dir. The RV64 only toolchain installed under `/opt/riscv/gnu-toolchain/rv64`, while the multilib toolchain installed under `/opt/riscv/gnu-toolchain/multilib`.
 
 3. Validate the C programming language with the emulator.
+
    1. Compile below C code with `riscv64-unknown-gnu-gcc main.c -o c.out`.
 
       ```c
@@ -133,6 +135,7 @@ Provide out of box docker image for the RISCV emulator.
       	return 0;
       }
       ```
+
    2. If everything goes well, you can execute the binary with spike as blow.
       ```
       /opt/riscv/gnu-toolchain/rv64/bin/spike /opt/riscv/gnu-toolchain/riscv64-unknown-elf/bin/pk64 c.out
@@ -143,9 +146,11 @@ Provide out of box docker image for the RISCV emulator.
       ```
 
 ### Open Issue
-* RV32 spike support, see this [issue](https://github.com/riscv-collab/riscv-gnu-toolchain/issues/1087).
-* SSH url sub module, see this [question](https://github.com/riscv-collab/riscv-gnu-toolchain/issues/1118).
+
+- RV32 spike support, see this [issue](https://github.com/riscv-collab/riscv-gnu-toolchain/issues/1087).
+- SSH url sub module, see this [question](https://github.com/riscv-collab/riscv-gnu-toolchain/issues/1118).
 
 ## Reference Link
+
 - [RISC-V Ubuntu Wiki](https://wiki.ubuntu.com/RISC-V?_ga=2.73233749.77592446.1660812353-217946006.1660812353)
 - [Docker Hub for Emulator](https://hub.docker.com/r/plincar/riscv-qemu-emulator)
