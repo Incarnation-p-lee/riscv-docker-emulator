@@ -20,12 +20,12 @@ RUN git clone https://github.com/riscv/${GNU_TOOLCHAIN} && \
     git submodule init && git submodule update pk && \
     ./configure --prefix=${RV64_PREFIX} \
     --with-arch=rv64imafdc --with-abi=lp64d --with-isa-spec=2.2 --with-sim=spike && \
-    make -j`nproc` build-sim SIM=spike && make install && \
+    make -j`nproc` build-sim SIM=spike && make clean && \
     # Multilib \
     ./configure --prefix=${MULTILIB_PREFIX} \
     --enable-multilib \
     --with-isa-spec=2.2 && \
-    make -j`nproc` && make install && \
+    make -j`nproc` && \
     cd - && rm -rf ${GNU_TOOLCHAIN}
 
 CMD bash
