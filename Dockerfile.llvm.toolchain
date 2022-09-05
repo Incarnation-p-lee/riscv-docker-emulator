@@ -26,6 +26,6 @@ RUN git clone https://github.com/llvm/${LLVM_TOOLCHAIN}.git && \
         -DLLVM_ENABLE_PROJECTS="clang" \
         -DLLVM_DEFAULT_TARGET_TRIPLE="riscv64-unknown-elf" ../llvm && \
     ninja -j $(nproc) && ninja install && \
-    cd ../../ && rm -rf ${LLVM_TOOLCHAIN}
+    cd ../../ # && rm -rf ${LLVM_TOOLCHAIN}
 
 CMD bash
