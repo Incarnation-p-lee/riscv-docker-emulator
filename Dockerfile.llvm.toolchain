@@ -10,7 +10,7 @@ RUN apt update && apt upgrade -y && apt install -y \
     autoconf automake autotools-dev curl python3 libmpc-dev libmpfr-dev libgmp-dev \
     git gawk build-essential bison flex texinfo gperf libtool patchutils bc \
     zlib1g-dev libexpat-dev libusb-1.0-0-dev device-tree-compiler pkg-config vim \
-    clang wget && \
+    clang wget cmake zip unzip libxml2-dev liblzma-dev && \
     wget -qO /usr/local/bin/ninja.gz https://github.com/ninja-build/ninja/releases/latest/download/ninja-linux.zip && \
     gunzip /usr/local/bin/ninja.gz && chmod a+x /usr/local/bin/ninja && \
     apt autoremove -y && apt clean && rm -rf /var/lib/apt/lists/*
