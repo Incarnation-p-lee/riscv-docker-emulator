@@ -28,6 +28,12 @@ jobs:
         with:
           username: plincar
           password: ${{ secrets.DOCKER_HUB_TOKEN }}
+      - name: Build and Push LLVM Toolchain
+        uses: docker/build-push-action@v3
+        with:
+          file: Dockerfile.llvm.toolchain
+          push: true
+          tags: plincar/riscv-llvm-toolchain:latest, plincar/riscv-llvm-toolchain:${{ steps.t1.outputs.time }}-${{ steps.tag.outputs.tag }}
       - name: Build and Push Qemu
         uses: docker/build-push-action@v3
         with:

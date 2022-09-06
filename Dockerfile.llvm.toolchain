@@ -1,0 +1,32 @@
+FROM ubuntu
+EXPOSE 9999
+
+ARG LLVM_TOOLCHAIN=llvm-project
+ARG BUILD_DIR=build
+ARG PREFIX=/opt/riscv/llvm-toolchain/
+
+# Install Packages
+RUN apt update && apt upgrade -y && apt install -y \
+    autoconf automake autotools-dev curl python3 libmpc-dev libmpfr-dev libgmp-dev \
+    git gawk build-essential bison flex texinfo gperf libtool patchutils bc \
+    zlib1g-dev libexpat-dev libusb-1.0-0-dev device-tree-compiler pkg-config vim \
+    clang wget cmake zip unzip libxml2-dev liblzma-dev gcc-riscv64-linux-gnu && \
+    wget -qO /usr/local/bin/ninja.gz https://github.com/ninja-build/ninja/releases/latest/download/ninja-linux.zip && \
+    gunzip /usr/local/bin/ninja.gz && chmod a+x /usr/local/bin/ninja && \
+    apt autoremove -y && apt clean && rm -rf /var/lib/apt/lists/*
+
+# Build GNU Toolchain
+WORKDIR "/root/build"
+RUN git clone https://github.com/llvm/${LLVM_TOOLCHAIN}.git && \
+    cd ${LLVM_TOOLCHAIN} && mkdir ${BUILD_DIR} && cd ${BUILD_DIR} && \
+    cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${PREFIX} \
+        -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ \
+        -DCMAKE_BUILD_TYPE=Release \
+        -DLLVM_TARGETS_TO_BUILD="RISCV" \
+        -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;lld" \
+        -DLLVM_ENABLE_RUNTIMES="libcxx;libcxxabi;libunwind" \
+        -DLLVM_DEFAULT_TARGET_TRIPLE="riscv64-linux-gnu" ../llvm && \
+    ninja -j $(nproc) && ninja install && \
+    cd ../../ && rm -rf ${LLVM_TOOLCHAIN}
+
+CMD bash
