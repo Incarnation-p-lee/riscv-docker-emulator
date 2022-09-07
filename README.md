@@ -37,67 +37,70 @@ Provide out of box docker image for the RISCV emulator.
 
 #### Start the Docker Image
 
-   ```
-   docker run -ti plincar/riscv-qemu-emulator:latest
-   ```
+```
+docker run -ti plincar/riscv-qemu-emulator:latest
+```
+
 #### Login the Docker Container
 
 You may need to wait until RISCV ubuntu image boot, and login with `ubuntu:ubuntu`.
 
-   > Note:
-   > The ubuntu system may require you change the password for first login.
+> Note:
+> The ubuntu system may require you change the password for first login.
 
 #### Update Package and Install Toolchain.
-   ```
-   sudo apt update
-   sudo apt install gcc -y
-   sudo apt install golang-go -y
-   ```
+
+```
+sudo apt update
+sudo apt install gcc -y
+sudo apt install golang-go -y
+```
+
 #### Validate the C Programming Language
 
-   1. Compile below C code with `riscv64-linux-gnu-gcc main.c -o c.out`.
+1.  Compile below C code with `riscv64-linux-gnu-gcc main.c -o c.out`.
 
-      ```c
-      #include <stdio.h>
+    ```c
+    #include <stdio.h>
 
-      int main()
-      {
-      	printf("Hello, world!\n");
-      	return 0;
-      }
-      ```
+    int main()
+    {
+    	printf("Hello, world!\n");
+    	return 0;
+    }
+    ```
 
-   2. If everything goes well, you may see similar output from your terminal.
-      ```
-      riscv64-linux-gnu-gcc main.c -o c.out
-      ./c.out
-      Hello, world!
-      file c.out
-      c.out: ELF 64-bit LSB pie executable, UCB RISC-V, RVC, double-float ABI, version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux-riscv64-lp64d.so.1, BuildID[sha1]=b5d550645bc6fbb2045c8b07d710ac9d7df44aad, for GNU/Linux 4.15.0, not stripped
-      ```
+2.  If everything goes well, you may see similar output from your terminal.
+    ```
+    riscv64-linux-gnu-gcc main.c -o c.out
+    ./c.out
+    Hello, world!
+    file c.out
+    c.out: ELF 64-bit LSB pie executable, UCB RISC-V, RVC, double-float ABI, version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux-riscv64-lp64d.so.1, BuildID[sha1]=b5d550645bc6fbb2045c8b07d710ac9d7df44aad, for GNU/Linux 4.15.0, not stripped
+    ```
 
 #### Validate the Golang Programming Language
 
-   1. Compile below Golang code with `go build -o go.out main.go`.
+1.  Compile below Golang code with `go build -o go.out main.go`.
 
-      ```golang
-      package main
+    ```golang
+    package main
 
-      import "fmt"
+    import "fmt"
 
-      func main() {
-      	fmt.Println("Hello, world!")
-      }
-      ```
+    func main() {
+    	fmt.Println("Hello, world!")
+    }
+    ```
 
-   2. If everything goes well, you may see similar output from your terminal.
-      ```shell
-      go build -o go.out main.go
-      ./go.out
-      Hello, world!
-      file go.out
-      go.out: ELF 64-bit LSB executable, UCB RISC-V, double-float ABI, version 1 (SYSV), statically linked, Go BuildID=XdPV_KgaapQAF-7BJps-/JfxOKsmko9eaB0VUSH5r/WPPni_yjw6hJogCIMxRZ/xx6PLTsSTbmjFPmeY9eq, not stripped
-      ```
+2.  If everything goes well, you may see similar output from your terminal.
+    ```shell
+    go build -o go.out main.go
+    ./go.out
+    Hello, world!
+    file go.out
+    go.out: ELF 64-bit LSB executable, UCB RISC-V, double-float ABI, version 1 (SYSV), statically linked, Go BuildID=XdPV_KgaapQAF-7BJps-/JfxOKsmko9eaB0VUSH5r/WPPni_yjw6hJogCIMxRZ/xx6PLTsSTbmjFPmeY9eq, not stripped
+    ```
 
 ### Emulated RISCV CPU
 
@@ -144,35 +147,37 @@ You may need to wait until RISCV ubuntu image boot, and login with `ubuntu:ubunt
 ### How to Steps
 
 #### Start the Docker Image
-   ```
-   docker run -ti plincar/riscv-gnu-toolchain:latest
-   ```
+
+```
+docker run -ti plincar/riscv-gnu-toolchain:latest
+```
+
 #### Check the Toolchain Install Dir
 
 The RV64 only toolchain installed under `/opt/riscv/gnu-toolchain/rv64`, while the multilib toolchain installed under `/opt/riscv/gnu-toolchain/multilib`.
 
 #### Validate the C Programming Language
 
-   1. Compile below C code with `riscv64-unknown-gnu-gcc main.c -o c.out`.
+1.  Compile below C code with `riscv64-unknown-gnu-gcc main.c -o c.out`.
 
-      ```c
-      #include <stdio.h>
+    ```c
+    #include <stdio.h>
 
-      int main()
-      {
-      	printf("Hello, world!\n");
-      	return 0;
-      }
-      ```
+    int main()
+    {
+    	printf("Hello, world!\n");
+    	return 0;
+    }
+    ```
 
-   2. If everything goes well, you can execute the binary with spike as blow.
-      ```
-      /opt/riscv/gnu-toolchain/rv64/bin/spike /opt/riscv/gnu-toolchain/riscv64-unknown-elf/bin/pk64 c.out
-      bbl loader
-      Hello, world!
-      file c.out
-      c.out: ELF 64-bit LSB pie executable, UCB RISC-V, RVC, double-float ABI, version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux-riscv64-lp64d.so.1, BuildID[sha1]=b5d550645bc6fbb2045c8b07d710ac9d7df44aad, for GNU/Linux 4.15.0, not stripped
-      ```
+2.  If everything goes well, you can execute the binary with spike as blow.
+    ```
+    /opt/riscv/gnu-toolchain/rv64/bin/spike /opt/riscv/gnu-toolchain/riscv64-unknown-elf/bin/pk64 c.out
+    bbl loader
+    Hello, world!
+    file c.out
+    c.out: ELF 64-bit LSB pie executable, UCB RISC-V, RVC, double-float ABI, version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux-riscv64-lp64d.so.1, BuildID[sha1]=b5d550645bc6fbb2045c8b07d710ac9d7df44aad, for GNU/Linux 4.15.0, not stripped
+    ```
 
 ### Open Issue
 
@@ -184,33 +189,35 @@ The RV64 only toolchain installed under `/opt/riscv/gnu-toolchain/rv64`, while t
 ### How to Steps
 
 #### Start the Docker Image
-   ```
-   docker run -ti plincar/riscv-llvm-toolchain:latest
-   ```
+
+```
+docker run -ti plincar/riscv-llvm-toolchain:latest
+```
+
 #### Check the Toolchain Install Dir
 
 The RISCV toolchain installed under `/opt/riscv/llvm-toolchain/`.
 
 #### Validate the C Programming Language
 
-   1. Compile below C code with `/opt/riscv/llvm-toolchain/bin/clang -fuse-ld=lld main.c -o c.out`.
+1.  Compile below C code with `/opt/riscv/llvm-toolchain/bin/clang -fuse-ld=lld main.c -o c.out`.
 
-      ```c
-      #include <stdio.h>
+    ```c
+    #include <stdio.h>
 
-      int main()
-      {
-      	printf("Hello, world!\n");
-      	return 0;
-      }
-      ```
+    int main()
+    {
+    	printf("Hello, world!\n");
+    	return 0;
+    }
+    ```
 
-   2. If everything goes well, you can compile the binary with llvm linker as below.
-      ```shell
-      root@97b5a88258c5:/tmp# /opt/riscv/llvm-toolchain/bin/clang -fuse-ld=lld main.c -o c.out 
-      root@97b5a88258c5:/tmp# file c.out
-      c.out: ELF 64-bit LSB pie executable, UCB RISC-V, RVC, double-float ABI, version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux-riscv64-lp64d.so.1, for GNU/Linux 4.15.0, not stripped
-      ```
+2.  If everything goes well, you can compile the binary with llvm linker as below.
+    ```shell
+    root@97b5a88258c5:/tmp# /opt/riscv/llvm-toolchain/bin/clang -fuse-ld=lld main.c -o c.out
+    root@97b5a88258c5:/tmp# file c.out
+    c.out: ELF 64-bit LSB pie executable, UCB RISC-V, RVC, double-float ABI, version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux-riscv64-lp64d.so.1, for GNU/Linux 4.15.0, not stripped
+    ```
 
 ## Reference Link
 
