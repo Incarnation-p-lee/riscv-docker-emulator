@@ -1,3 +1,27 @@
+- [RISCV Docker Emulator](#riscv-docker-emulator)
+  - [Precondition](#precondition)
+  - [Qemu](#qemu)
+    - [How to Steps](#how-to-steps)
+      - [Start the Docker Image](#start-the-docker-image)
+      - [Login the Docker Container](#login-the-docker-container)
+      - [Update Package and Install Toolchain.](#update-package-and-install-toolchain)
+      - [Validate the C Programming Language](#validate-the-c-programming-language)
+      - [Validate the Golang Programming Language](#validate-the-golang-programming-language)
+    - [Emulated RISCV CPU](#emulated-riscv-cpu)
+    - [Open Issues](#open-issues)
+  - [GNU Toolchain](#gnu-toolchain)
+    - [How to Steps](#how-to-steps)
+      - [Start the Docker Image](#start-the-docker-image)
+      - [Check the Toolchain Install Dir](#check-the-toolchain-install-dir)
+      - [Validate the C Programming Language](#validate-the-c-programming-language)
+    - [Open Issue](#open-issue)
+  - [LLVM Clang Tool Chain](#llvm-clang-tool-chain)
+    - [How to Steps](#how-to-steps)
+      - [Start the Docker Image](#start-the-docker-image)
+      - [Check the Toolchain Install Dir](#check-the-toolchain-install-dir)
+      - [Validate the C Programming Language](#validate-the-c-programming-language)
+  - [Reference Link](#reference-link)
+
 # RISCV Docker Emulator
 
 Provide out of box docker image for the RISCV emulator.
@@ -11,22 +35,25 @@ Provide out of box docker image for the RISCV emulator.
 
 ### How to Steps
 
-1. Start the docker image with below command.
+#### Start the Docker Image
+
    ```
    docker run -ti plincar/riscv-qemu-emulator:latest
    ```
-2. Wait until RISCV ubuntu image boot, and login with `ubuntu:ubuntu`.
+#### Login the Docker Container
+
+You may need to wait until RISCV ubuntu image boot, and login with `ubuntu:ubuntu`.
 
    > Note:
    > The ubuntu system may require you change the password for first login.
 
-3. Update package and install toolchain.
+#### Update Package and Install Toolchain.
    ```
    sudo apt update
    sudo apt install gcc -y
    sudo apt install golang-go -y
    ```
-4. Validate the C programming language with the emulator.
+#### Validate the C Programming Language
 
    1. Compile below C code with `riscv64-linux-gnu-gcc main.c -o c.out`.
 
@@ -49,7 +76,7 @@ Provide out of box docker image for the RISCV emulator.
       c.out: ELF 64-bit LSB pie executable, UCB RISC-V, RVC, double-float ABI, version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux-riscv64-lp64d.so.1, BuildID[sha1]=b5d550645bc6fbb2045c8b07d710ac9d7df44aad, for GNU/Linux 4.15.0, not stripped
       ```
 
-5. Validate the Golang programming language with the emulator.
+#### Validate the Golang Programming Language
 
    1. Compile below Golang code with `go build -o go.out main.go`.
 
@@ -116,13 +143,15 @@ Provide out of box docker image for the RISCV emulator.
 
 ### How to Steps
 
-1. Start the docker image with below command.
+#### Start the Docker Image
    ```
    docker run -ti plincar/riscv-gnu-toolchain:latest
    ```
-2. Check the toolchain install dir. The RV64 only toolchain installed under `/opt/riscv/gnu-toolchain/rv64`, while the multilib toolchain installed under `/opt/riscv/gnu-toolchain/multilib`.
+#### Check the Toolchain Install Dir
 
-3. Validate the C programming language with the emulator.
+The RV64 only toolchain installed under `/opt/riscv/gnu-toolchain/rv64`, while the multilib toolchain installed under `/opt/riscv/gnu-toolchain/multilib`.
+
+#### Validate the C Programming Language
 
    1. Compile below C code with `riscv64-unknown-gnu-gcc main.c -o c.out`.
 
@@ -149,6 +178,39 @@ Provide out of box docker image for the RISCV emulator.
 
 - RV32 spike support, see this [issue](https://github.com/riscv-collab/riscv-gnu-toolchain/issues/1087).
 - SSH url sub module, see this [question](https://github.com/riscv-collab/riscv-gnu-toolchain/issues/1118).
+
+## LLVM Clang Tool Chain
+
+### How to Steps
+
+#### Start the Docker Image
+   ```
+   docker run -ti plincar/riscv-llvm-toolchain:latest
+   ```
+#### Check the Toolchain Install Dir
+
+The RISCV toolchain installed under `/opt/riscv/llvm-toolchain/`.
+
+#### Validate the C Programming Language
+
+   1. Compile below C code with `/opt/riscv/llvm-toolchain/bin/clang -fuse-ld=lld main.c -o c.out`.
+
+      ```c
+      #include <stdio.h>
+
+      int main()
+      {
+      	printf("Hello, world!\n");
+      	return 0;
+      }
+      ```
+
+   2. If everything goes well, you can compile the binary with llvm linker as below.
+      ```shell
+      root@97b5a88258c5:/tmp# /opt/riscv/llvm-toolchain/bin/clang -fuse-ld=lld main.c -o c.out 
+      root@97b5a88258c5:/tmp# file c.out
+      c.out: ELF 64-bit LSB pie executable, UCB RISC-V, RVC, double-float ABI, version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux-riscv64-lp64d.so.1, for GNU/Linux 4.15.0, not stripped
+      ```
 
 ## Reference Link
 
