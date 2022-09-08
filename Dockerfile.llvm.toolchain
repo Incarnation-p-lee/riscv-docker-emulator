@@ -2,8 +2,11 @@ FROM ubuntu
 EXPOSE 9999
 
 ARG LLVM_TOOLCHAIN=llvm-project
-ARG BUILD_DIR=build
-ARG PREFIX=/opt/riscv/llvm-toolchain/
+ARG LLVM_BUILD_DIR=build
+ARG LLVM_PREFIX=/opt/riscv/llvm-toolchain/
+
+ARG GNU_TOOLCHAIN=riscv-gnu-toolchain
+ARG GNU_PREFIX=/opt/riscv/gnu-toolchain/
 
 # Install Packages
 RUN apt update && apt upgrade -y && apt install -y \
@@ -15,11 +18,11 @@ RUN apt update && apt upgrade -y && apt install -y \
     gunzip /usr/local/bin/ninja.gz && chmod a+x /usr/local/bin/ninja && \
     apt autoremove -y && apt clean && rm -rf /var/lib/apt/lists/*
 
-# Build GNU Toolchain
+# Build LLVM Toolchain
 WORKDIR "/root/build"
 RUN git clone https://github.com/llvm/${LLVM_TOOLCHAIN}.git && \
-    cd ${LLVM_TOOLCHAIN} && mkdir ${BUILD_DIR} && cd ${BUILD_DIR} && \
-    cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${PREFIX} \
+    cd ${LLVM_TOOLCHAIN} && mkdir ${LLVM_BUILD_DIR} && cd ${LLVM_BUILD_DIR} && \
+    cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${LLVM_PREFIX} \
         -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ \
         -DCMAKE_BUILD_TYPE=Release \
         -DLLVM_TARGETS_TO_BUILD="RISCV" \
@@ -28,5 +31,14 @@ RUN git clone https://github.com/llvm/${LLVM_TOOLCHAIN}.git && \
         -DLLVM_DEFAULT_TARGET_TRIPLE="riscv64-linux-gnu" ../llvm && \
     ninja -j $(nproc) && ninja install && \
     cd ../../ && rm -rf ${LLVM_TOOLCHAIN}
+
+# Build Spike Emulator
+WORKDIR "/root/build"
+RUN git clone https://github.com/riscv/${GNU_TOOLCHAIN}.git && \
+    cd ${GNU_TOOLCHAIN} && git submodule init && git submodule update && \
+    ./configure --prefix=${GNU_PREFIX} \
+    --with-arch=rv64imafdvc --with-abi=lp64d --with-isa-spec=20191213 --with-sim=spike && \
+    make -j`nproc` build-sim SIM=spike && \
+    cd ../ && rm -rf ${GNU_TOOLCHAIN}
 
 CMD bash
