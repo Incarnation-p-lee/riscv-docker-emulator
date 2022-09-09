@@ -27,7 +27,7 @@ RUN git clone https://github.com/riscv/${GNU_TOOLCHAIN} && \
     --enable-multilib --with-isa-spec=20191213 && \
     make -j`nproc` && make clean && \
     # RVV-Next \
-    git check rvv-next && \
+    git reset --hard origin/master && git checkout rvv-next && \
     ./configure --prefix=${RVV_NEXT_PREFIX} \
     --with-arch=rv64imafdcv --with-abi=lp64d --with-isa-spec=20191213 && \
     make -j`nproc` && \
