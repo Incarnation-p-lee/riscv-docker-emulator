@@ -11,36 +11,54 @@ on:
     - cron: '0 0 * * *' # 8 AM in UTC +8.
 
 jobs:
-  docker:
+  generate_tag:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Get Release Name or Commit ID
-        uses: tenhaus/get-release-or-tag@v2
-        id: tag
       - name: Generate Tag
         id: t1
         uses: Kaven-Universe/github-action-current-date-time@v1.1.0
         with:
           format: "YYYY_MM_DD"
+      - name: Get Release Name or Commit ID
+        uses: tenhaus/get-release-or-tag@v2
+        id: tag
+  build_qemu_image:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
       - name: Login to DockerHub
         uses: docker/login-action@v2
         with:
           username: plincar
           password: ${{ secrets.DOCKER_HUB_TOKEN }}
-      - name: Build and Push Qemu
+      - name: Build and Push Qemu Docker Iamge
         uses: docker/build-push-action@v3
         with:
           file: Dockerfile.qemu
           push: true
           tags: plincar/riscv-qemu-emulator:latest, plincar/riscv-qemu-emulator:${{ steps.t1.outputs.time }}-${{ steps.tag.outputs.tag }}
-      - name: Build and Push GNU Toolchain
+  build_gnu_toolchain_image:
+      - uses: actions/checkout@v2
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: plincar
+          password: ${{ secrets.DOCKER_HUB_TOKEN }}
+      - name: Build and Push Gnu Toolchain Docker Iamge
         uses: docker/build-push-action@v3
         with:
           file: Dockerfile.gnu.toolchain
           push: true
           tags: plincar/riscv-gnu-toolchain:latest, plincar/riscv-gnu-toolchain:${{ steps.t1.outputs.time }}-${{ steps.tag.outputs.tag }}
-      - name: Build and Push LLVM Toolchain
+  build_llvm_toolchain_image:
+      - uses: actions/checkout@v2
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: plincar
+          password: ${{ secrets.DOCKER_HUB_TOKEN }}
+      - name: Build and Push LLVM Docker Iamge
         uses: docker/build-push-action@v3
         with:
           file: Dockerfile.llvm.toolchain
