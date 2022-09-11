@@ -196,12 +196,12 @@ docker run -ti plincar/riscv-llvm-toolchain:latest
 
 #### Check the Toolchain Install Dir
 
-* The llvm toolchain installed under `/opt/riscv/llvm-toolchain/`.
-* The gnu toolchain installed under `/opt/riscv/gnu-toolchain/`.
-  * There are three versions of gnu toolchain.
-    * The multi-lib version installed under `/opt/riscv/gnu-toolchain/multilib`.
-    * The rv64 with spike version installed under `/opt/riscv/gnu-toolchain/rv64`.
-    * The rvv-next version installed under `/opt/riscv/gnu-toolchain/rvv-next`.
+- The llvm toolchain installed under `/opt/riscv/llvm-toolchain/`.
+- The gnu toolchain installed under `/opt/riscv/gnu-toolchain/`.
+  - There are three versions of gnu toolchain.
+    - The multi-lib version installed under `/opt/riscv/gnu-toolchain/multilib`.
+    - The rv64 with spike version installed under `/opt/riscv/gnu-toolchain/rv64`.
+    - The rvv-next version installed under `/opt/riscv/gnu-toolchain/rvv-next`.
 
 #### Validate the C Programming Language
 
