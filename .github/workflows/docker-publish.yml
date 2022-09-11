@@ -11,19 +11,6 @@ on:
     - cron: '0 0 * * *' # 8 AM in UTC +8.
 
 jobs:
-  generate_tag:
-    name: Generate Tags
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Generate Tag
-        id: t1
-        uses: Kaven-Universe/github-action-current-date-time@v1.1.0
-        with:
-          format: "YYYY_MM_DD"
-      - name: Get Release Name or Commit ID
-        uses: tenhaus/get-release-or-tag@v2
-        id: tag
   build_qemu_image:
     name: Build Qemu Docker Image
     runs-on: ubuntu-latest
@@ -34,12 +21,17 @@ jobs:
         with:
           username: plincar
           password: ${{ secrets.DOCKER_HUB_TOKEN }}
+      - name: Generate Tag
+        id: t1
+        uses: Kaven-Universe/github-action-current-date-time@v1.1.0
+        with:
+          format: "YYYY_MM_DD"
       - name: Build and Push Qemu Docker Iamge
         uses: docker/build-push-action@v3
         with:
           file: Dockerfile.qemu
           push: true
-          tags: plincar/riscv-qemu-emulator:latest, plincar/riscv-qemu-emulator:${{ generate_tag.steps.t1.outputs.time }}-${{ generate_tag.steps.tag.outputs.tag }}
+          tags: plincar/riscv-qemu-emulator:latest, plincar/riscv-qemu-emulator:${{ steps.t1.outputs.time }}
   build_gnu_toolchain_image:
     name: Build GNU Toolchain Docker Image
     runs-on: ubuntu-latest
@@ -50,12 +42,17 @@ jobs:
         with:
           username: plincar
           password: ${{ secrets.DOCKER_HUB_TOKEN }}
+      - name: Generate Tag
+        id: t1
+        uses: Kaven-Universe/github-action-current-date-time@v1.1.0
+        with:
+          format: "YYYY_MM_DD"
       - name: Build and Push Gnu Toolchain Docker Iamge
         uses: docker/build-push-action@v3
         with:
           file: Dockerfile.gnu.toolchain
           push: true
-          tags: plincar/riscv-gnu-toolchain:latest, plincar/riscv-gnu-toolchain:${{ steps.t1.outputs.time }}-${{ steps.tag.outputs.tag }}
+          tags: plincar/riscv-gnu-toolchain:latest, plincar/riscv-gnu-toolchain:${{ steps.t1.outputs.time }}
   build_llvm_toolchain_image:
     name: Build LLVM Toolchain Docker Image
     runs-on: ubuntu-latest
@@ -67,9 +64,14 @@ jobs:
         with:
           username: plincar
           password: ${{ secrets.DOCKER_HUB_TOKEN }}
+      - name: Generate Tag
+        id: t1
+        uses: Kaven-Universe/github-action-current-date-time@v1.1.0
+        with:
+          format: "YYYY_MM_DD"
       - name: Build and Push LLVM Docker Iamge
         uses: docker/build-push-action@v3
         with:
           file: Dockerfile.llvm.toolchain
           push: true
-          tags: plincar/riscv-llvm-toolchain:latest, plincar/riscv-llvm-toolchain:${{ steps.t1.outputs.time }}-${{ steps.tag.outputs.tag }}
+          tags: plincar/riscv-llvm-toolchain:latest, plincar/riscv-llvm-toolchain:${{ steps.t1.outputs.time }}
