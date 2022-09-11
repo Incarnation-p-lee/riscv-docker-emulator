@@ -59,6 +59,7 @@ jobs:
   build_llvm_toolchain_image:
     name: Build LLVM Toolchain Docker Image
     runs-on: ubuntu-latest
+    steps:
       - uses: actions/checkout@v2
       - name: Login to DockerHub
         uses: docker/login-action@v2
