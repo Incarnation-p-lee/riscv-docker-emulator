@@ -5,12 +5,16 @@ ARG LLVM_TOOLCHAIN=llvm-project
 ARG LLVM_BUILD_DIR=build
 ARG LLVM_PREFIX=/opt/riscv/llvm-toolchain/
 
+ARG QEMU=qemu
+ARG QEMU_BUILD_DIR=build
+ARG QEMU_PREFIX=/opt/riscv/qemu/
+
 # Install Packages
 RUN apt update && apt upgrade -y && apt install -y \
     autoconf automake autotools-dev curl python3 libmpc-dev libmpfr-dev libgmp-dev \
-    git gawk build-essential bison flex texinfo gperf libtool patchutils bc \
+    git gawk build-essential bison flex texinfo gperf libtool patchutils bc libglib2.0-dev \
     zlib1g-dev libexpat-dev libusb-1.0-0-dev device-tree-compiler pkg-config vim \
-    clang wget cmake zip unzip libxml2-dev liblzma-dev gcc-riscv64-linux-gnu && \
+    clang wget cmake zip unzip libxml2-dev liblzma-dev gcc-riscv64-linux-gnu libpixman-1-dev && \
     wget -qO /usr/local/bin/ninja.gz https://github.com/ninja-build/ninja/releases/latest/download/ninja-linux.zip && \
     gunzip /usr/local/bin/ninja.gz && chmod a+x /usr/local/bin/ninja && \
     apt autoremove -y && apt clean && rm -rf /var/lib/apt/lists/*
@@ -28,5 +32,14 @@ RUN git clone https://github.com/llvm/${LLVM_TOOLCHAIN}.git && \
         -DLLVM_DEFAULT_TARGET_TRIPLE="riscv64-linux-gnu" ../llvm && \
     ninja -j $(nproc) && ninja install && \
     cd ../../ && rm -rf ${LLVM_TOOLCHAIN}
+
+# Build Qemu
+WORKDIR "/root/build"
+RUN git clone https://gitlab.com/qemu-project/${QEMU}.git && \
+    cd ${QEMU} && git submodule init && mkdir ${QEMU_BUILD_DIR} && cd ${QEMU_BUILD_DIR} && \
+    ../configure --target-list=riscv64-linux-user,riscv64-softmmu \
+        --prefix=${QEMU_PREFIX} && \
+    make -j $(nproc) && make install && \
+    cd ../../ && rm -rf ${QEMU}
 
 CMD bash
