@@ -5,6 +5,7 @@ ARG GNU_TOOLCHAIN=riscv-gnu-toolchain
 ARG MULTILIB_PREFIX=/opt/riscv/gnu-toolchain/multilib
 ARG RV64_PREFIX=/opt/riscv/gnu-toolchain/rv64
 ARG RV64_LINUX_PREFIX=/opt/riscv/gnu-toolchain/rv64-linux
+ARG RV64_LINUX_SYSROOT_LIB=${RV64_LINUX_PREFIX}/sysroot/lib
 ARG RVV_NEXT_PREFIX=/opt/riscv/gnu-toolchain/rvv-next
 
 # Install Packages
@@ -36,6 +37,10 @@ RUN git clone https://github.com/riscv/${GNU_TOOLCHAIN} && \
     ./configure --prefix=${RVV_NEXT_PREFIX} \
     --with-arch=rv64imafdcv --with-abi=lp64d --with-isa-spec=20191213 && \
     make -j`nproc` && \
-    cd - && rm -rf ${GNU_TOOLCHAIN}
+    cd - && rm -rf ${GNU_TOOLCHAIN} && \
+    # Configurations \
+    ln -svf ${RV64_LINUX_SYSROOT_LIB}/ld-linux-riscv64-lp64d.so.1 /lib/ld-linux-riscv64-lp64d.so.1
+
+ENV LD_LIBRARY_PATH=${RV64_LINUX_SYSROOT_LIB}
 
 CMD bash
